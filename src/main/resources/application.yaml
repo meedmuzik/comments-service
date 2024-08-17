@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: comments-service
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/postgres
+    username: postgres
+    password: password
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: validate
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+  mvc:
+    format:
+      date: iso
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-server:8070/eureka
+
+server:
+  port: 8087
+
