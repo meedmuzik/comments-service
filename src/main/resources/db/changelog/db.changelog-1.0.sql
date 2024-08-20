@@ -4,9 +4,9 @@
 CREATE TABLE comment
 (
     id           SERIAL PRIMARY KEY,
-    user_id      REFERENCES users(id),
+    user_id      BIGINT,
     body         VARCHAR(512) NOT NULL,
-    track_id     LONG REFERENCES tracks(id),
+    track_id     BIGINT,
     rating       SMALLINT NOT NULL
 );
 
