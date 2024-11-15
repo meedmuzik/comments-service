@@ -25,6 +25,7 @@ public class CommentService {
     public CommentReadDto create(CommentCreateEditDto commentCreateEditDto) {
         Comment comment = commentCreateDtoMapper.map(commentCreateEditDto);
         comment = commentRepository.save(comment);
+        commentRepository.createCommentRelationships(comment.getUserId(), comment.getTrackId(), comment.getId());
         tracksClient.updateTrackRating(comment.getId());
         return commentReadDtoMapper.map(comment);
     }
@@ -38,6 +39,7 @@ public class CommentService {
     public void deleteCommentById(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Failed to get comment"));
+        commentRepository.deleteCommentRelationships(commentId);
         tracksClient.updateTrackRating(comment.getId());
         commentRepository.delete(comment);
     }
@@ -48,6 +50,7 @@ public class CommentService {
         comment = commentCreateDtoMapper.map(commentCreateEditDto, comment);
         comment.setId(id);
         commentRepository.save(comment);
+        tracksClient.updateTrackRating(comment.getId());
         return commentReadDtoMapper.map(comment);
     }
 
