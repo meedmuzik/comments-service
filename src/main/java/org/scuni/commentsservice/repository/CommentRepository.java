@@ -23,7 +23,7 @@ public interface CommentRepository extends Neo4jRepository<Comment, Long> {
                                     @Param("commentId") Long commentId);
 
     @Query("""
-                MATCH (c:Comment)-[r1:AUTHORED]->(u:User),
+                MATCH (u:User)-[r1:AUTHORED]->(c:Comment),
                       (c)-[r2:COMMENTED_ON]->(t:Track)
                 WHERE id(c) = $commentId
                 DELETE r1, r2
