@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +28,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment")
-    public ResponseEntity<Object> create(@RequestParam CommentCreateEditDto commentCreateEditDto) {
+    public ResponseEntity<Object> create(@RequestBody CommentCreateEditDto commentCreateEditDto) {
         CommentReadDto commentReadDto = commentService.create(commentCreateEditDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("artistId", commentReadDto.getId(),
@@ -48,7 +49,7 @@ public class CommentController {
     }
 
     @PutMapping("/comment/{id}")
-    public ResponseEntity<CommentReadDto> updateCommentById(@PathVariable("id") @Min(1) Long id, @RequestParam CommentCreateEditDto commentCreateEditDto) {
+    public ResponseEntity<CommentReadDto> updateCommentById(@PathVariable("id") @Min(1) Long id, @RequestBody CommentCreateEditDto commentCreateEditDto) {
         CommentReadDto comment = commentService.updateComment(id, commentCreateEditDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(comment);
