@@ -1,7 +1,6 @@
 package org.scuni.commentsservice.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.scuni.commentsservice.dto.CommentCreateEditDto;
 import org.scuni.commentsservice.dto.CommentReadDto;
 import org.scuni.commentsservice.entity.Comment;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TracksClient tracksClient;
@@ -25,10 +23,8 @@ public class CommentService {
     private final CommentReadDtoMapper commentReadDtoMapper;
 
     public CommentReadDto create(CommentCreateEditDto commentCreateEditDto) {
-        log.info("Дто для создания комментария: {}", commentCreateEditDto);
         Comment comment = commentCreateDtoMapper.map(commentCreateEditDto);
         comment = commentRepository.save(comment);
-        log.info("id комментария {} для трека с id {}, юзера с id {}", comment.getId(), comment.getTrackId(), comment.getUserId());
         commentRepository.createCommentRelationships(comment.getUserId(), comment.getTrackId(), comment.getId());
         tracksClient.updateTrackRating(comment.getTrackId());
         return commentReadDtoMapper.map(comment);

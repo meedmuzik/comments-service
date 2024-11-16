@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class CommentCreateEditDto {
-    private Long id;
 
     private Long userId;
 
