@@ -9,23 +9,15 @@ public class CommentCreateDtoMapper implements Mapper<CommentCreateEditDto, Comm
 
     @Override
     public Comment map(CommentCreateEditDto object) {
-        Comment comment = new Comment();
-        Comment.builder()
+        return Comment.builder()
                 .body(object.getBody())
-                .rating(comment.getRating())
+                .rating(object.getRating())
                 .trackId(object.getTrackId())
                 .userId(object.getUserId())
                 .build();
-        return comment;
     }
 
     public Comment map(CommentCreateEditDto object, Comment comment) {
-        Comment.builder()
-                .body(object.getBody())
-                .rating(comment.getRating())
-                .trackId(object.getTrackId())
-                .userId(object.getUserId())
-                .build();
         comment.setBody(object.getBody());
         comment.setRating(object.getRating());
         return comment;
