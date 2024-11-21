@@ -1,12 +1,16 @@
 --liquibase formatted sql
 
 --changeset egorsemenovv:1
-CREATE TABLE comment
-(
-    id           SERIAL PRIMARY KEY,
-    user_id      BIGINT,
-    body         VARCHAR(512) NOT NULL,
-    track_id     BIGINT,
-    rating       SMALLINT NOT NULL
-);
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS hstore;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE IF NOT EXISTS vector_store (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    content text,
+    metadata json,
+    embedding vector(1024)
+    );
+
+CREATE INDEX ON vector_store USING HNSW (embedding vector_cosine_ops);
 

@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.scuni.commentsservice.dto.CommentCreateEditDto;
 import org.scuni.commentsservice.dto.CommentReadDto;
+import org.scuni.commentsservice.dto.QueryDto;
 import org.scuni.commentsservice.service.CommentService;
+import org.scuni.commentsservice.service.RecommendationsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +28,14 @@ import java.util.Map;
 @RequestMapping("api/v1")
 public class CommentController {
     private final CommentService commentService;
+    private final RecommendationsService recommendationsService;
 
     @PostMapping("/comment")
     public ResponseEntity<Object> create(@RequestBody CommentCreateEditDto commentCreateEditDto) {
         CommentReadDto commentReadDto = commentService.create(commentCreateEditDto);
+        recommendationsService.saveEmbeddedComment(commentReadDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("artistId", commentReadDto.getId(),
+                .body(Map.of("commentId", commentReadDto.getId(),
                         "message", "Comment was added"));
     }
 
@@ -69,6 +73,20 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Map.of("comments", comments));
+    }
+//
+//    @GetMapping("/test/{query}")
+//    public ResponseEntity<Object> test(@PathVariable("query") String query) {
+//        recommendationsService.saveEmbeddings(query);
+//        return ResponseEntity.noContent().build();
+//    }
+
+    @PostMapping("/recommendations/comments")
+    public ResponseEntity<Object> getRecommendedComments(@RequestBody QueryDto query) {
+        List<Long> recommendationCommentsIds = recommendationsService.getRecommendationCommentsIds(query);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of("commentsIds", recommendationCommentsIds));
     }
 
 }
