@@ -1,15 +1,28 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/vector_store
+    username: postgres
+    password: password
   application:
     name: comments-service
   mvc:
     format:
       date: iso
   neo4j:
+    #    uri: bolt://neo4j:7687
     uri: bolt://neo4j:7687
-#    uri: bolt://localhost:7687
     authentication:
       username: neo4j
       password: password
+
+  ai:
+    mistralai:
+      api-key: ключ
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
 
 eureka:
   instance:
@@ -18,8 +31,8 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
+      #      defaultZone: http://eureka-server:8070/eureka
       defaultZone: http://eureka-server:8070/eureka
-#      defaultZone: http://localhost:8070/eureka
 
 server:
   port: 8087
